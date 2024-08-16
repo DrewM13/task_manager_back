@@ -26,24 +26,7 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod();
         });
 });
-builder.Services.AddAuthentication(opt =>
-{
-opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(opt =>
-{
-    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["jwt:issuer"],
-        ValidAudience = builder.Configuration["jwt:audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwt:SecretKey"])),
-        ClockSkew = TimeSpan.Zero
-    };
-});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
