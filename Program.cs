@@ -15,6 +15,7 @@ builder.Services.AddScoped<ICollaborators, CollaboratorsService>();
 builder.Services.AddScoped<IProject, ProjectService>();
 builder.Services.AddScoped<ITimeTrackers, TimeTrackersService>();
 builder.Services.AddScoped<ITask, TaskService>();
+builder.Services.AddScoped<IDashboard, DashboardService>();
 /*builder.Services.AddScoped<IUser, UserService>();*/
 builder.Services.AddCors(options =>
 {
