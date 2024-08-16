@@ -13,7 +13,7 @@ namespace task_manager.Models
         public DateTime dtmEnd { get; set; }
         [Required]
         [StringLength(200)]
-        public int vchTimeZoneID { get; set; }
+        public string vchTimeZoneID { get; set; }
         [Required]
         public long IDTask { get; set; }
         [Required]

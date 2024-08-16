@@ -43,9 +43,24 @@ namespace task_manager.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
+        } 
         
-        [HttpGet]
+        [HttpPost]
+        [Route("Create")]
+        public IActionResult CreateAssociationWithTask(TaskCollaboratorModel taskCollaboratorModel)
+        {
+            try
+            {
+                _ICollaboratorsService.CreateOrUpdateAssociationWithTask(taskCollaboratorModel);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        } 
+        
+        /*[HttpGet]
         [Route("Get/iduser/{IDUser}")]
         public IActionResult GetByIDUser(long IDUser)
         {
@@ -58,6 +73,6 @@ namespace task_manager.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
+        }*/
     }
 }

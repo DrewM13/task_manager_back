@@ -16,6 +16,16 @@ builder.Services.AddScoped<IProject, ProjectService>();
 builder.Services.AddScoped<ITimeTrackers, TimeTrackersService>();
 builder.Services.AddScoped<ITask, TaskService>();
 /*builder.Services.AddScoped<IUser, UserService>();*/
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.WithOrigins("*")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 builder.Services.AddAuthentication(opt =>
 {
 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -48,7 +58,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllerRoute(

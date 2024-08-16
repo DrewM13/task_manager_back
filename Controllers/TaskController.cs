@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using task_manager.Models;
 using task_manager.Repositories;
+using task_manager.Services;
 
 namespace task_manager.Controllers
 {
@@ -43,14 +44,28 @@ namespace task_manager.Controllers
             }
         }
         
+        [HttpGet]
+        [Route("GetByIDProject/{IDProject}")]
+        public IActionResult GetByIDProject(long IDProject)
+        {
+            try
+            {
+                List<viewTaskCollaborator> task = _ITaskService.viewListTask(IDProject);
+                return Ok(task);
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
         [HttpPost]
         [Route("Create")]
         public IActionResult Create(TasksModel Task)
         {
             try
             {
-                _ITaskService.CreateTask(Task);
-                return NoContent();
+                TasksModel newTask = _ITaskService.CreateTask(Task);
+                return Ok(newTask);
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);

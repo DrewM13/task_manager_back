@@ -4,9 +4,9 @@ namespace task_manager.Repositories
 {
     public interface IUserCollaborator
     {
-        public List<UserCollaboratorModel> GetUserCollaborator();
-        public UserCollaboratorModel GetUserCollaboratorByIDUser();
-        public UserCollaboratorModel GetUserCollaboratorByIDCollaborator();
-        public UserCollaboratorModel GetUserCollaboratorByID();
+        public List<TaskCollaboratorModel> GetUserCollaborator();
+        public TaskCollaboratorModel GetUserCollaboratorByIDUser();
+        public TaskCollaboratorModel GetUserCollaboratorByIDCollaborator();
+        public TaskCollaboratorModel GetUserCollaboratorByID();
     }
 }

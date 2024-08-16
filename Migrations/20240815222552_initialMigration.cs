@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace task_manager.Migrations
 {
-    public partial class initialmigartion : Migration
+    public partial class initialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -65,6 +65,7 @@ namespace task_manager.Migrations
                     IDTask = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     vchTaskName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    vchDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IDProject = table.Column<long>(type: "bigint", nullable: false),
                     dtmCreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     dtmUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -82,28 +83,28 @@ namespace task_manager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tUserCollaborator",
+                name: "tTaskCollaborator",
                 columns: table => new
                 {
-                    IDUserCollaborator = table.Column<long>(type: "bigint", nullable: false)
+                    IDTaskCollaborator = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    tUser = table.Column<long>(type: "bigint", nullable: false),
-                    tCollaborator = table.Column<long>(type: "bigint", nullable: false)
+                    IDTask = table.Column<long>(type: "bigint", nullable: false),
+                    IDCollaborator = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tUserCollaborator", x => x.IDUserCollaborator);
+                    table.PrimaryKey("PK_tTaskCollaborator", x => x.IDTaskCollaborator);
                     table.ForeignKey(
-                        name: "FK_tUserCollaborator_tCollaborator_tCollaborator",
-                        column: x => x.tCollaborator,
+                        name: "FK_tTaskCollaborator_tCollaborator_IDCollaborator",
+                        column: x => x.IDCollaborator,
                         principalTable: "tCollaborator",
                         principalColumn: "IDCollaborator",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tUserCollaborator_tUser_tUser",
-                        column: x => x.tUser,
-                        principalTable: "tUser",
-                        principalColumn: "IDUser",
+                        name: "FK_tTaskCollaborator_tTask_IDTask",
+                        column: x => x.IDTask,
+                        principalTable: "tTask",
+                        principalColumn: "IDTask",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -115,7 +116,7 @@ namespace task_manager.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     dtmStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     dtmEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    vchTimeZoneID = table.Column<int>(type: "int", maxLength: 200, nullable: false),
+                    vchTimeZoneID = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IDTask = table.Column<long>(type: "bigint", nullable: false),
                     IDCollaborator = table.Column<long>(type: "bigint", nullable: false),
                     dtmCreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -145,6 +146,16 @@ namespace task_manager.Migrations
                 column: "IDProject");
 
             migrationBuilder.CreateIndex(
+                name: "IX_tTaskCollaborator_IDCollaborator",
+                table: "tTaskCollaborator",
+                column: "IDCollaborator");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tTaskCollaborator_IDTask",
+                table: "tTaskCollaborator",
+                column: "IDTask");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_tTimeTracker_IDCollaborator",
                 table: "tTimeTracker",
                 column: "IDCollaborator");
@@ -159,34 +170,24 @@ namespace task_manager.Migrations
                 table: "tUser",
                 column: "vchUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_tUserCollaborator_tCollaborator",
-                table: "tUserCollaborator",
-                column: "tCollaborator");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_tUserCollaborator_tUser",
-                table: "tUserCollaborator",
-                column: "tUser");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "tTaskCollaborator");
+
+            migrationBuilder.DropTable(
                 name: "tTimeTracker");
 
             migrationBuilder.DropTable(
-                name: "tUserCollaborator");
-
-            migrationBuilder.DropTable(
-                name: "tTask");
+                name: "tUser");
 
             migrationBuilder.DropTable(
                 name: "tCollaborator");
 
             migrationBuilder.DropTable(
-                name: "tUser");
+                name: "tTask");
 
             migrationBuilder.DropTable(
                 name: "tProject");

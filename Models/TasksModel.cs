@@ -11,6 +11,9 @@ namespace task_manager.Models
         [Required]
         [StringLength(250)]
         public string vchTaskName { get; set; }
+        
+        [Required]
+        public string vchDescription { get; set; }
         [Required]
         public long IDProject { get; set; }
         public DateTime dtmCreatedAt { get; set; }

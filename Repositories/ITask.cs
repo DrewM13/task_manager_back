@@ -6,8 +6,9 @@ namespace task_manager.Repositories
     {
         public List<TasksModel> GetAllTask();
         public TasksModel GetTaskByID(long IDTask);
+        public List<viewTaskCollaborator> viewListTask(long IDTask);
         public void UpdateTask(TasksModel tasksModel);
-        public void CreateTask(TasksModel tasksModel);
+        public TasksModel CreateTask(TasksModel tasksModel);
         public void DeleteTask(long IDTask);
     }
 }

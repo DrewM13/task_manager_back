@@ -46,9 +46,14 @@ namespace task_manager.Services
             try
             {
                 TasksModel tasks = _dataBaseContext.tTask.Find(tasksModel.IDTask);
-                tasks.dtmUpdatedAt = DateTime.Now;
-                _dataBaseContext.tTask.Update(tasks);
-                _dataBaseContext.SaveChanges();
+                if(tasks != null)
+                {
+                    tasks.vchTaskName = tasksModel.vchTaskName;
+                    tasks.vchDescription = tasksModel.vchDescription;
+                    tasks.dtmUpdatedAt = DateTime.Now;
+                    _dataBaseContext.tTask.Update(tasks);
+                    _dataBaseContext.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -56,13 +61,14 @@ namespace task_manager.Services
             }
         }
 
-        public void CreateTask(TasksModel tasksModel)
+        public TasksModel CreateTask(TasksModel tasksModel)
         {
             try
             {
                 tasksModel.dtmCreatedAt = DateTime.Now;
                 _dataBaseContext.tTask.Add(tasksModel);
                 _dataBaseContext.SaveChanges();
+                return tasksModel;
 
             }
             catch (Exception ex)
@@ -80,18 +86,63 @@ namespace task_manager.Services
                 {
                     throw new ArgumentException("O IDTask informado não existe");
                 }
-                var teste = _dataBaseContext.tTimeTracker.ToList();
                 List<TimeTrackersModel> TimeTrackersList =  _dataBaseContext.tTimeTracker.ToList().Where(item => item.IDTask == IDTask).ToList();
 
                 if (TimeTrackersList.Any())
                 {
                     _dataBaseContext.tTimeTracker.RemoveRange(TimeTrackersList);
                 }
-
+               var TaskCollaborator = _dataBaseContext.tTaskCollaborator.Where(item => item.IDTask == IDTask);
+                _dataBaseContext.tTaskCollaborator.RemoveRange(TaskCollaborator);
                 _dataBaseContext.tTask.Remove(Tasks);
                 _dataBaseContext.SaveChanges();
             }
             catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
+
+        public List<viewTaskCollaborator> viewListTask(long IDProject)
+        {
+            try
+            {
+                viewTaskCollaborator vTaskCollaborator = new viewTaskCollaborator();
+                List<viewTaskCollaborator> vListTaskCollaborator = new List<viewTaskCollaborator>();
+                var query = from t in _dataBaseContext.tTask
+                            join p in _dataBaseContext.tProject on t.IDProject equals p.IDProject
+                            join tc in _dataBaseContext.tTaskCollaborator on t.IDTask equals tc.IDTask into taskCollaboratorGroup
+                            from tc in taskCollaboratorGroup.DefaultIfEmpty()
+                            join c in _dataBaseContext.tCollaborator on tc.IDCollaborator equals c.IDCollaborator into collaboratorGroup
+                            from c in collaboratorGroup.DefaultIfEmpty()
+                            where p.IDProject == IDProject
+                            select new
+                            {
+                                IDTaskCollaborator = tc == null ? (long?)null : tc.IDTaskCollaborator,
+                                t.IDTask,
+                                t.vchTaskName,
+                                t.vchDescription,
+                                IDCollaborator = c == null ? (long?)null : c.IDCollaborator,
+                                vchCollaboratorName = c == null ? null : c.vchCollaboratorName
+                            };
+                query.ToList().ForEach(item =>
+                {
+                    vTaskCollaborator = new viewTaskCollaborator()
+                    {
+                        IDCollaborator = item.IDCollaborator,
+                        IDTask = item.IDTask,
+                        IDTaskCollaborator = item.IDTaskCollaborator,
+                        vchTaskName = item.vchTaskName,
+                        vchDescription = item.vchDescription,
+                        vchCollaboratorName = item.vchCollaboratorName
+                    };
+                    vListTaskCollaborator.Add(vTaskCollaborator);
+                });
+                
+                return vListTaskCollaborator;
+
+            }
+            catch (Exception ex) 
             {
                 throw new ArgumentException(ex.Message);
             }

@@ -76,6 +76,29 @@ namespace task_manager.Migrations
                     b.ToTable("tProject");
                 });
 
+            modelBuilder.Entity("task_manager.Models.TaskCollaboratorModel", b =>
+                {
+                    b.Property<long>("IDTaskCollaborator")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IDTaskCollaborator"), 1L, 1);
+
+                    b.Property<long>("IDCollaborator")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IDTask")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("IDTaskCollaborator");
+
+                    b.HasIndex("IDCollaborator");
+
+                    b.HasIndex("IDTask");
+
+                    b.ToTable("tTaskCollaborator");
+                });
+
             modelBuilder.Entity("task_manager.Models.TasksModel", b =>
                 {
                     b.Property<long>("IDTask")
@@ -95,6 +118,10 @@ namespace task_manager.Migrations
 
                     b.Property<DateTime?>("dtmUpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("vchDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("vchTaskName")
                         .IsRequired()
@@ -137,9 +164,10 @@ namespace task_manager.Migrations
                     b.Property<DateTime?>("dtmUpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("vchTimeZoneID")
+                    b.Property<string>("vchTimeZoneID")
+                        .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("IDTimeTracker");
 
@@ -148,29 +176,6 @@ namespace task_manager.Migrations
                     b.HasIndex("IDTask");
 
                     b.ToTable("tTimeTracker");
-                });
-
-            modelBuilder.Entity("task_manager.Models.UserCollaboratorModel", b =>
-                {
-                    b.Property<long>("IDUserCollaborator")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IDUserCollaborator"), 1L, 1);
-
-                    b.Property<long>("tCollaborator")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("tUser")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("IDUserCollaborator");
-
-                    b.HasIndex("tCollaborator");
-
-                    b.HasIndex("tUser");
-
-                    b.ToTable("tUserCollaborator");
                 });
 
             modelBuilder.Entity("task_manager.Models.UserModel", b =>
@@ -208,6 +213,21 @@ namespace task_manager.Migrations
                     b.ToTable("tUser");
                 });
 
+            modelBuilder.Entity("task_manager.Models.TaskCollaboratorModel", b =>
+                {
+                    b.HasOne("task_manager.Models.CollaboratorsModel", null)
+                        .WithMany()
+                        .HasForeignKey("IDCollaborator")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("task_manager.Models.TasksModel", null)
+                        .WithMany()
+                        .HasForeignKey("IDTask")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("task_manager.Models.TasksModel", b =>
                 {
                     b.HasOne("task_manager.Models.ProjectModel", null)
@@ -230,25 +250,6 @@ namespace task_manager.Migrations
                         .HasForeignKey("IDTask")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("task_manager.Models.UserCollaboratorModel", b =>
-                {
-                    b.HasOne("task_manager.Models.CollaboratorsModel", "IDCollaborator")
-                        .WithMany()
-                        .HasForeignKey("tCollaborator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("task_manager.Models.UserModel", "IDUser")
-                        .WithMany()
-                        .HasForeignKey("tUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IDCollaborator");
-
-                    b.Navigation("IDUser");
                 });
 #pragma warning restore 612, 618
         }

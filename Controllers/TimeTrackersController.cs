@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using task_manager.Models;
 using task_manager.Repositories;
-using task_manager.Services;
 
 namespace task_manager.Controllers
 {
@@ -31,10 +29,25 @@ namespace task_manager.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpGet]
+        [Route("GetByIDTask/{IDTask}")]
+        public IActionResult GetByIDTask(long IDTask)
+        {
+            try
+            {
+                List<TimeTrackersModel> TimeTrackers = _ITimeTrackersService.GetByIDTaskTimeTracker(IDTask);
+                return Ok(TimeTrackers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPost]
         [Route("Create")]
-        public IActionResult Create(TimeTrackersModel TimeTrackers)
+        public IActionResult Create(List<TimeTrackersModel> TimeTrackers)
         {
             try
             {
@@ -47,28 +60,13 @@ namespace task_manager.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("Update")]
-        public IActionResult Update(TimeTrackersModel TimeTrackers)
-        {
-            try
-            {
-                 _ITimeTrackersService.UpdateTimeTracker(TimeTrackers);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpDelete]
         [Route("Delete/{IDTimeTracker}")]
-        public IActionResult Delete(long IDTimeTracker)
+        public IActionResult Delete(List<TimeTrackersModel> timeTrackersModel)
         {
             try
             {
-                _ITimeTrackersService.DeleteTimeTracker(IDTimeTracker);
+                _ITimeTrackersService.DeleteTimeTracker(timeTrackersModel);
                 return NoContent();
             }
             catch (Exception ex)

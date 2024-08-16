@@ -26,14 +26,13 @@ namespace task_manager.Services
             }
         }
 
-        public void UpdateTimeTracker(TimeTrackersModel timeTrackersModel)
+        public List<TimeTrackersModel> GetByIDTaskTimeTracker(long IDTask)
         {
             try
             {
-                TimeTrackersModel timeTrackers = _dataBaseContext.tTimeTracker.Find(timeTrackersModel.IDTimeTracker);
-                timeTrackers.dtmUpdatedAt = DateTime.Now;
-                _dataBaseContext.tTimeTracker.Update(timeTrackers);
-                _dataBaseContext.SaveChanges();
+                List<TimeTrackersModel> TimeTrackersList = new List<TimeTrackersModel>();
+                TimeTrackersList = _dataBaseContext.tTimeTracker.Where(item=> item.IDTask == IDTask).ToList();
+                return TimeTrackersList;
             }
             catch (Exception ex)
             {
@@ -41,30 +40,30 @@ namespace task_manager.Services
             }
         }
 
-        public void CreateTimeTracker(TimeTrackersModel timeTrackersModel)
+        public void CreateTimeTracker(List<TimeTrackersModel> timeTrackersModel)
         {
             try
             {
-                timeTrackersModel.dtmCreatedAt = DateTime.Now;
-                 _dataBaseContext.tTimeTracker.Update(timeTrackersModel);
-                _dataBaseContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException(ex.Message);
-            }
-        }
-
-        public void DeleteTimeTracker(long IDTimeTracker)
-        {
-            try
-            {
-                TimeTrackersModel timeTrackersModel =_dataBaseContext.tTimeTracker.Where(item => item.IDTimeTracker == IDTimeTracker).First();
-                if(timeTrackersModel == null)
+                List<TimeTrackersModel> auxTimeTrackersModel = timeTrackersModel.Select(item =>
                 {
-                    throw new ArgumentException("O IDTimeTracker informado não existe");
-                }
-               _dataBaseContext.tTimeTracker.Remove(timeTrackersModel);
+                    item.dtmCreatedAt = DateTime.Now;
+                    return item;
+                }).ToList();
+                _dataBaseContext.tTimeTracker.AddRange(auxTimeTrackersModel);
+                _dataBaseContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
+
+        public void DeleteTimeTracker(List<TimeTrackersModel> timeTrackersModel)
+        {
+            try
+            {
+               
+                _dataBaseContext.tTimeTracker.RemoveRange(timeTrackersModel);
                 _dataBaseContext.SaveChanges();    
             }
             catch (Exception ex)

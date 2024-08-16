@@ -1,4 +1,6 @@
-﻿using studyProject.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using studyProject.Data;
+using System.Threading.Tasks;
 using task_manager.Models;
 using task_manager.Repositories;
 
@@ -46,9 +48,13 @@ namespace task_manager.Services
             try
             {
                 ProjectModel project = _dataBaseContext.tProject.Find(projectModel.IDProject);
-                project.dtmUpdatedAt = DateTime.Now;
-                 _dataBaseContext.tProject.Update(project);
-                 _dataBaseContext.SaveChanges();
+                if(project != null)
+                {
+                    project.vchProjectName = projectModel.vchProjectName;
+                    project.dtmUpdatedAt = DateTime.Now;
+                    _dataBaseContext.tProject.Update(project);
+                    _dataBaseContext.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -86,8 +92,11 @@ namespace task_manager.Services
                      {
                          List<TimeTrackersModel> timeTrackersList = _dataBaseContext.tTimeTracker.Where(item=>item.IDTask==task.IDTask).ToList();
                          _dataBaseContext.tTimeTracker.RemoveRange(timeTrackersList);
-                     }
+                           var taskCollaborator = _dataBaseContext.tTaskCollaborator.Where(item => item.IDTask == task.IDTask);
+                            _dataBaseContext.tTaskCollaborator.RemoveRange(taskCollaborator);
+                    }
                         _dataBaseContext.tTask.RemoveRange(TasksList);
+                        
                 }
 
                 _dataBaseContext.tProject.Remove(project);

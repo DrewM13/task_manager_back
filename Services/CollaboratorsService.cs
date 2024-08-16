@@ -24,8 +24,34 @@ namespace task_manager.Services
                 throw new ArgumentException(ex.Message);
             }
         }
-        
-        public List<CollaboratorsModel> GetCollaboratorsByIDUser(long IDUser)
+
+        public void CreateOrUpdateAssociationWithTask(TaskCollaboratorModel taskCollaboratorModel)
+        {
+            try
+            {
+                TaskCollaboratorModel taskCollaboratorModel1 = _dataBaseContext.tTaskCollaborator.Where(item=>item.IDTask == taskCollaboratorModel.IDTask).FirstOrDefault();
+                if (taskCollaboratorModel1 != null)
+                {
+                    List<TimeTrackersModel> timeTrackersModel = _dataBaseContext.tTimeTracker.Where(item => item.IDTask == taskCollaboratorModel1.IDTask).ToList();
+                    if (timeTrackersModel.Any())
+                    {
+                        _dataBaseContext.tTimeTracker.RemoveRange(timeTrackersModel);
+                    }
+                    taskCollaboratorModel1.IDCollaborator = taskCollaboratorModel.IDCollaborator;
+                    _dataBaseContext.tTaskCollaborator.Update(taskCollaboratorModel1);  
+                }
+                else
+                {
+                    _dataBaseContext.tTaskCollaborator.Add(taskCollaboratorModel);
+                }
+
+                _dataBaseContext.SaveChanges();
+            } catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
+        /*public List<CollaboratorsModel> GetCollaboratorsByIDUser(long IDUser)
         {
             try
             {
@@ -37,7 +63,7 @@ namespace task_manager.Services
             {
                 throw new ArgumentException(ex.Message);
             }
-        }
+        }*/
         
         public CollaboratorsModel GetCollaboratorByID(long IDCollaborator)
         {
