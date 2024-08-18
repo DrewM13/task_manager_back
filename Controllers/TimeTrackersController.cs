@@ -14,21 +14,6 @@ namespace task_manager.Controllers
         {
             _ITimeTrackersService = ITimeTrackersService;
         }
-
-        [HttpGet]
-        [Route("Get")]
-        public IActionResult Get()
-        {
-            try
-            {
-                List<TimeTrackersModel> TimeTrackers = _ITimeTrackersService.GetAllTimeTracker();
-                return Ok(TimeTrackers);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
         
         [HttpGet]
         [Route("GetByIDTask/{IDTask}")]
@@ -61,7 +46,7 @@ namespace task_manager.Controllers
         }
 
         [HttpDelete]
-        [Route("Delete/{IDTimeTracker}")]
+        [Route("Delete")]
         public IActionResult Delete(List<TimeTrackersModel> timeTrackersModel)
         {
             try

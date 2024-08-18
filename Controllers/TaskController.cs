@@ -14,20 +14,6 @@ namespace task_manager.Controllers
         public TaskController(ITask TaskService)
         {
             _ITaskService = TaskService;
-        }
-
-        [HttpGet]
-        [Route("Get")]
-        public IActionResult Get()
-        {
-            try
-            {
-               List<TasksModel> tasks = _ITaskService.GetAllTask();
-                return Ok(tasks);
-            } catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }  
         
         [HttpGet]

@@ -12,19 +12,6 @@ namespace task_manager.Services
         {
             _dataBaseContext = dataBaseContext;
         }
-        public List<TimeTrackersModel> GetAllTimeTracker()
-        {
-            try
-            {
-                List<TimeTrackersModel> TimeTrackersList = new List<TimeTrackersModel>();
-                TimeTrackersList = _dataBaseContext.tTimeTracker.ToList();
-                return TimeTrackersList;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException(ex.Message);
-            }
-        }
 
         public List<TimeTrackersModel> GetByIDTaskTimeTracker(long IDTask)
         {

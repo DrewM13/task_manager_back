@@ -13,19 +13,6 @@ namespace task_manager.Services
         {
             _dataBaseContext = dataBaseContext;
         }
-        public List<TasksModel> GetAllTask()
-        {
-            try
-            {
-                List<TasksModel> tasksList = new List<TasksModel>();
-                tasksList = _dataBaseContext.tTask.ToList();
-                return tasksList;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException(ex.Message);
-            }
-        }
 
         public TasksModel GetTaskByID(long IDTask)
         {
