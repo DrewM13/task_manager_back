@@ -59,20 +59,5 @@ namespace task_manager.Controllers
                 return BadRequest(ex.Message);
             }
         } 
-        
-        /*[HttpGet]
-        [Route("Get/iduser/{IDUser}")]
-        public IActionResult GetByIDUser(long IDUser)
-        {
-            try
-            {
-                List<CollaboratorsModel> Collaborator = _ICollaboratorsService.GetCollaboratorsByIDUser(IDUser);
-                return Ok(Collaborator);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }*/
     }
 }

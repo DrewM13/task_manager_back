@@ -28,9 +28,5 @@ namespace task_manager.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
-        
-    
-      
     }
 }

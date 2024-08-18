@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using task_manager.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace studyProject.Data
 {
@@ -59,11 +58,6 @@ namespace studyProject.Data
                   .HasForeignKey(t => t.IDTask)
                   .OnDelete(DeleteBehavior.Cascade);
             });
-            /*modelBuilder.Entity<TasksModel>().HasOne(item=>item.IDProject).WithMany().HasForeignKey(t => t.IDProject);*/
-            /*  modelBuilder.Entity<TimeTrackersModel>().HasOne(item=>item.IDTask).WithMany().HasForeignKey(t => t.IDTask);
-              modelBuilder.Entity<TimeTrackersModel>().HasOne(item=>item.IDCollaborator).WithMany().HasForeignKey(t => t.IDCollaborator);*/
-
-            /*  modelBuilder.Entity<UserModel>().HasOne(t => t.CollaboratorsModel).WithOne(p => p.UserModel).HasForeignKey(t => t).OnDelete(DeleteBehavior.Cascade);*/
 
         }
     }
