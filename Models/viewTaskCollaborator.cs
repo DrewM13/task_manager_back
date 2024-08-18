@@ -8,6 +8,7 @@
         public string vchTaskName { get; set; }
         public string vchDescription { get; set; }
         public string vchCollaboratorName { get; set; }
-        public string vchTimeTracked { get; set; }
+        public DateTime dtmCreatedAt { get; set; }
+        public DateTime? dtmUpdatedAt { get; set; }
     }
 }

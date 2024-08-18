@@ -51,19 +51,6 @@ namespace task_manager.Services
                 throw new ArgumentException(ex.Message);
             }
         }
-        /*public List<CollaboratorsModel> GetCollaboratorsByIDUser(long IDUser)
-        {
-            try
-            {
-                List<CollaboratorsModel> collaboratorsList = new List<CollaboratorsModel>();
-               List<long> auxList = _dataBaseContext.tUserCollaborator.Where(item=>item.IDUser.IDUser == IDUser).Select(item=>item.IDCollaborator.IDCollaborator).ToList();
-                collaboratorsList = _dataBaseContext.tCollaborator.Where(item=> auxList.Contains(item.IDCollaborator)).ToList();
-                return collaboratorsList;
-            } catch (Exception ex)
-            {
-                throw new ArgumentException(ex.Message);
-            }
-        }*/
         
         public CollaboratorsModel GetCollaboratorByID(long IDCollaborator)
         {

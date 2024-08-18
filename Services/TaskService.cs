@@ -122,6 +122,8 @@ namespace task_manager.Services
                                 t.IDTask,
                                 t.vchTaskName,
                                 t.vchDescription,
+                                t.dtmCreatedAt,
+                                t.dtmUpdatedAt,
                                 IDCollaborator = c == null ? (long?)null : c.IDCollaborator,
                                 vchCollaboratorName = c == null ? null : c.vchCollaboratorName
                             };
@@ -134,7 +136,9 @@ namespace task_manager.Services
                         IDTaskCollaborator = item.IDTaskCollaborator,
                         vchTaskName = item.vchTaskName,
                         vchDescription = item.vchDescription,
-                        vchCollaboratorName = item.vchCollaboratorName
+                        vchCollaboratorName = item.vchCollaboratorName,
+                        dtmCreatedAt = item.dtmCreatedAt,
+                        dtmUpdatedAt = item.dtmUpdatedAt
                     };
                     vListTaskCollaborator.Add(vTaskCollaborator);
                 });
